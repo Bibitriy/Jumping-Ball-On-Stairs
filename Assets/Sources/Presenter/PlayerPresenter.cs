@@ -7,7 +7,7 @@ public class PlayerPresenter : MonoBehaviour
     [SerializeField] private JumpMovementView _ballMovementView;
     [SerializeField] private PlayerInput _input;
     [SerializeField] private CollisionDetector _collisionDetector;
-    [SerializeField] private EndGameWindowView _endGameWindowView;
+    [SerializeField] private UIView _endGameWindowView;
     [SerializeField] private ScoreView _scoreView;
     [SerializeField] private LeaderboardView _leaderboardView;
     [SerializeField] private float _xJumpPositionOffset;
@@ -40,6 +40,7 @@ public class PlayerPresenter : MonoBehaviour
         ButtonActions.OnSceneReload += _mainBall.PlayerScore.SaveRecord;
         MainBall.OnGameOver += _endGameWindowView.ShowEndGameWindow;
         MainBall.OnGameOver += _input.StopControlling;
+        PlayerInput.OnGameStart += _endGameWindowView.HideStartGameWindow;
     }
 
     private void OnDisable()
@@ -55,9 +56,10 @@ public class PlayerPresenter : MonoBehaviour
         _mainBall.BallMovement.BallJumpedOnNextStair -= _mainBall.PlayerScore.IncreaseScore;
         _mainBall.PlayerScore.ScoreChanged -= _scoreView.UpdateScore;
         _mainBall.GameStartShown -= _leaderboardView.ShowLeaderboard;
-        ButtonActions.NameChanged += _mainBall.PlayerScore.SetNewName;
+        ButtonActions.NameChanged -= _mainBall.PlayerScore.SetNewName;
         ButtonActions.OnSceneReload -= _mainBall.PlayerScore.SaveRecord;
         MainBall.OnGameOver -= _endGameWindowView.ShowEndGameWindow;
         MainBall.OnGameOver -= _input.StopControlling;
+        PlayerInput.OnGameStart -= _endGameWindowView.HideStartGameWindow;
     }
 }

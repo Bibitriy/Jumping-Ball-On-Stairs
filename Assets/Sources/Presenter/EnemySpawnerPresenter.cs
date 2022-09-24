@@ -6,6 +6,7 @@ public class EnemySpawnerPresenter : MonoBehaviour
     [SerializeField] private float _spawnInterval;
     [SerializeField] private float _border;
 
+    private bool _isGameRunning = false;
     private EnemiesSpawner _enemiesSpawner;
 
     private void Awake()
@@ -15,16 +16,26 @@ public class EnemySpawnerPresenter : MonoBehaviour
 
     private void Update()
     {
-        _enemiesSpawner.Update();
+        if (_isGameRunning)
+        {
+            _enemiesSpawner.Update();
+        }
+    }
+
+    public void StartGame()
+    {
+        _isGameRunning = true;
     }
 
     private void OnEnable()
     {
         _enemiesSpawner.SpawnEnemy += _enemySpawnerView.SpawnEnemy;
+        PlayerInput.OnGameStart += StartGame;
     }
 
     private void OnDisable()
     {
-        _enemiesSpawner.SpawnEnemy += _enemySpawnerView.SpawnEnemy;
+        _enemiesSpawner.SpawnEnemy -= _enemySpawnerView.SpawnEnemy;
+        PlayerInput.OnGameStart -= StartGame;
     }
 }

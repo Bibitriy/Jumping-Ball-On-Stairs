@@ -10,14 +10,16 @@ public class PlayerInput : MonoBehaviour
     private Vector2 _fingerUpPosition;
     private float _touchStartTime;
     private bool _isSwiped = false;
-    private bool _isGameRunning = true;
+    private bool _isGameRunning = false;
+    private bool _isGameStopped = false;
     
     public static event Action<BallMovement.Direction> OnSwipe;
     public static event Action OnTap;
+    public static Action OnGameStart;
 
     private void Update()
     {
-        if (_isGameRunning)
+        if (_isGameRunning && !_isGameStopped)
         {
             foreach (Touch touch in Input.touches)
             {
@@ -46,11 +48,17 @@ public class PlayerInput : MonoBehaviour
 
     public void StopControlling()
     {
-        _isGameRunning = false;
+        _isGameStopped = true;
     }
 
     private void DetectSwipe()
     {
+        if (!_isGameRunning)
+        {
+            OnGameStart?.Invoke();
+            _isGameRunning = true;
+        }
+
         if (!_isSwiped && SwipeDistanceCheckMet())
         {
             var direction = _fingerDownPosition.x - _fingerUpPosition.x > 0 ? BallMovement.Direction.Right : BallMovement.Direction.Left;
@@ -72,6 +80,11 @@ public class PlayerInput : MonoBehaviour
 
     private void DetectTouch()
     {
+        if (!_isGameRunning)
+        {
+            OnGameStart?.Invoke();
+            _isGameRunning = true;
+        }
         if (Time.time - _touchStartTime < _tapTime)
         {
             OnTap?.Invoke();
