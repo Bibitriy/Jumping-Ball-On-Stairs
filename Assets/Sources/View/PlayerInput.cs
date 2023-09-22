@@ -19,7 +19,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        if (_isGameRunning && !_isGameStopped)
+        if (!_isGameStopped)
         {
             foreach (Touch touch in Input.touches)
             {

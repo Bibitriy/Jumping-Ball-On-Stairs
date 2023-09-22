@@ -1792,6 +1792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _endGameWindow: {fileID: 1174050646}
+  _startWindow: {fileID: 2083851259}
 --- !u!114 &896240919
 MonoBehaviour:
   m_ObjectHideFlags: 0
